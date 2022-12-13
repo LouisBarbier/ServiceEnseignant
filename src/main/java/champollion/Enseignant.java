@@ -1,8 +1,12 @@
 package champollion;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class Enseignant extends Personne {
 
-    // TODO : rajouter les autres méthodes présentes dans le diagramme UML
+    ArrayList<ServicePrevu> enseignements=new ArrayList<ServicePrevu>();
+    ArrayList<Intervention> interventions=new ArrayList<Intervention>();
 
     public Enseignant(String nom, String email) {
         super(nom, email);
@@ -17,8 +21,13 @@ public class Enseignant extends Personne {
      *
      */
     public int heuresPrevues() {
-        // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        double vTot=0;
+        for( ServicePrevu s : enseignements) {
+            vTot+=s.getVolumeCM()*1.5;
+            vTot+=s.getVolumeTD();
+            vTot+=s.getVolumeTP()*0.75;
+        }
+        return (int)vTot;
     }
 
     /**
@@ -31,8 +40,15 @@ public class Enseignant extends Personne {
      *
      */
     public int heuresPrevuesPourUE(UE ue) {
-        // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        double vTot=0;
+        for( ServicePrevu s : enseignements) {
+            if (s.getUe()==ue) {
+                vTot += s.getVolumeCM() * 1.5;
+                vTot += s.getVolumeTD();
+                vTot += s.getVolumeTP() * 0.75;
+            }
+        }
+        return (int)vTot;
     }
 
     /**
@@ -44,8 +60,34 @@ public class Enseignant extends Personne {
      * @param volumeTP le volume d'heures de TP
      */
     public void ajouteEnseignement(UE ue, int volumeCM, int volumeTD, int volumeTP) {
-        // TODO: Implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        enseignements.add(new ServicePrevu(ue,nom,volumeCM,volumeTD,volumeTP));
     }
 
+    public void ajouteIntervention (UE ue,Date debut,int duree,int heureDebut,TypeIntervention type, Salle salle){
+        interventions.add(new Intervention(ue,debut,duree,heureDebut,type,salle,nom));
+    }
+
+    public int resteAPlanifier(UE ue,TypeIntervention type){
+        int hPrevuUEType=0;
+        for (ServicePrevu s : enseignements) {
+            if (s.getUe()==ue) {
+                if (type==TypeIntervention.CM){
+                    hPrevuUEType+=s.getVolumeCM();
+                }
+                if (type==TypeIntervention.TD){
+                    hPrevuUEType+=s.getVolumeTD();
+                }
+                if (type==TypeIntervention.TP){
+                    hPrevuUEType+=s.getVolumeTP();
+                }
+            }
+        }
+        int hPlanifieUEType=0;
+        for (Intervention i : interventions){
+            if (i.getUe()==ue && i.getType()==type){
+                hPlanifieUEType+=i.getDuree();
+            }
+        }
+        return hPrevuUEType-hPlanifieUEType;
+    }
 }

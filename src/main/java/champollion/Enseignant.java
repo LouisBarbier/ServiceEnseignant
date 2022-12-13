@@ -27,7 +27,12 @@ public class Enseignant extends Personne {
             vTot+=s.getVolumeTD();
             vTot+=s.getVolumeTP()*0.75;
         }
-        return (int)vTot;
+        int vTotInt=0;
+        while (vTot>=0.5){
+            vTotInt++;
+            vTot-=1;
+        }
+        return vTotInt;
     }
 
     /**
@@ -48,7 +53,12 @@ public class Enseignant extends Personne {
                 vTot += s.getVolumeTP() * 0.75;
             }
         }
-        return (int)vTot;
+        int vTotInt=0;
+        while (vTot>=0.5){
+            vTotInt++;
+            vTot-=1;
+        }
+        return vTotInt;
     }
 
     /**

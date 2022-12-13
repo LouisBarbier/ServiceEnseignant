@@ -1,6 +1,10 @@
 package champollion;
 
 import org.junit.jupiter.api.*;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ChampollionJUnitTest {
@@ -38,5 +42,14 @@ public class ChampollionJUnitTest {
 	}
 
 	@Test
-	public void testHeureAPlanifier()
+	public void testHeureAPlanifier(){
+		untel.ajouteEnseignement(uml, 0, 0, 10);
+		assertEquals(8, untel.heuresPrevuesPourUE(uml),
+				"L'enseignant doit maintenant avoir 10 heures prévues pour l'UE 'uml'");
+
+		untel.ajouteIntervention(uml, new Date(2022, Calendar.DECEMBER,13), 4,14,TypeIntervention.TP,new Salle("B105",18));
+		assertEquals(6, untel.resteAPlanifier(uml,TypeIntervention.TP),
+				"L'enseignant doit maintenant avoir 6 heures prévues pour l'UE 'uml'");
+
+	}
 }
